@@ -1,0 +1,27 @@
+body {
+  background-color: rgb(114, 163, 191);
+}
+
+.wrapper {
+  display: flex;
+}
+
+.box {
+  width: 250px;
+  height: 250px;
+  margin: 10px;
+  background-color: rgb(175, 114, 191);
+}
+
+.a {
+  order: 3;
+  background-color: rgb(114, 123, 191);
+}
+
+.b {
+  order: 1;
+}
+
+.c {
+  order: 2;
+}
