@@ -37,6 +37,10 @@ Keyborder.prototype.getHighestOrderProp = function(nodeList) {
   return 3;
 }
 
+Keyborder.prototype.getLowestOrderProp = function(nodeList) {
+  return 1;
+}
+
 // Returns the closest next element by the order property
 Keyborder.prototype.getNextElement = function(currentElement) {
   const siblings = currentElement.parentNode.children;
@@ -56,13 +60,35 @@ Keyborder.prototype.getNextElement = function(currentElement) {
   return closestElm;
 }
 
+// Returns the closest next element by the order property
+Keyborder.prototype.getPreviousElement = function(currentElement) {
+  const siblings = currentElement.parentNode.children;
+  const currentOrder = this.getOrderProp(currentElement);
+  // Setting the initial closest order value to the highest possibility
+  let closestOrder = this.getLowestOrderProp(siblings);
+  let closestElm = currentElement;
+
+  Array.prototype.forEach.call(siblings, elm => {
+    const elmOrder = this.getOrderProp(elm);
+    if (elmOrder < currentOrder && elmOrder >= closestOrder) {
+      closestOrder = elmOrder;
+      closestElm = elm;
+    }
+  });
+
+  return closestElm;
+}
+
 Keyborder.prototype.keyNavigation = function(event) {
-  console.log('hiii...')
   const key = event.which;
   const activeElm = document.activeElement;
   switch (key) {
     case 39:
       this.getNextElement(activeElm).focus();
+      break;
+    case 37:
+      this.getPreviousElement(activeElm).focus();
+      break;
   }
 }
 
