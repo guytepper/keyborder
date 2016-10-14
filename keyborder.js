@@ -28,6 +28,9 @@ Keyborder.prototype.setTabIndex = function(elm) {
   const lowestOrder = this.getLowestOrder(children);
 
   Array.prototype.forEach.call(children, elm => {
+    // Don't set tabindex if data-no-focus set on the element
+    if (elm.dataset.noFocus == 'true') return;
+
     if (this.getOrderProp(elm) == lowestOrder) elm.tabIndex = '0';
     else elm.tabIndex = '-1';
   });
