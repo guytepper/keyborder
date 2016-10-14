@@ -1,5 +1,5 @@
 var Keyborder = function(selectors) {
-  this.elements = document.querySelectorAll(selectors);  
+  this.elements = document.querySelectorAll(selectors);
   Array.prototype.forEach.call(this.elements, elm => {
     this.setTabIndex(elm);
     elm.addEventListener('keydown', e => this.keyNavigation(e)); // ehm y return
@@ -18,7 +18,7 @@ Keyborder.prototype.getOrderProp = function(elm) {
   orderArr = Array.prototype.map.call(children, elm => {
     return this.getOrderProp(elm);
   });
- 
+
   return Math.min.apply(null, orderArr);
  };
 
@@ -26,19 +26,35 @@ Keyborder.prototype.getOrderProp = function(elm) {
 Keyborder.prototype.setTabIndex = function(elm) {
   const children = elm.children;
   const lowestOrder = this.getLowestOrder(children);
-  
+
   Array.prototype.forEach.call(children, elm => {
     if (this.getOrderProp(elm) == lowestOrder) elm.tabIndex = '0';
     else elm.tabIndex = '-1';
   });
 };
 
-// Returns next DOM element by the order property
-// Keyborder.prototype.getNextElement = function(elm) {
-//   const currentOrder = this.getOrderProp(elm);  
-//   const siblings = elm.parentNode.children;
-//   return this.closest(siblings, currentOrder);
-// }
+Keyborder.prototype.getHighestOrderProp = function(nodeList) {
+  return 3;
+}
+
+// Returns the closest next element by the order property
+Keyborder.prototype.getNextElement = function(currentElement) {
+  const siblings = currentElement.parentNode.children;
+  const currentOrder = this.getOrderProp(currentElement);
+  // Setting the initial closest order value to the highest possibility
+  let closestOrder = this.getHighestOrderProp(siblings);
+  let closestElm = currentElement;
+
+  Array.prototype.forEach.call(siblings, elm => {
+    const elmOrder = this.getOrderProp(elm);
+    if (elmOrder > currentOrder && elmOrder <= closestOrder) {
+      closestOrder = elmOrder;
+      closestElm = elm;
+    }
+  });
+
+  return closestElm;
+}
 
 Keyborder.prototype.keyNavigation = function(event) {
   console.log('hiii...')
@@ -46,7 +62,7 @@ Keyborder.prototype.keyNavigation = function(event) {
   const activeElm = document.activeElement;
   switch (key) {
     case 39:
-      // this.getNextElement(activeElm).focus();
+      this.getNextElement(activeElm).focus();
   }
 }
 
