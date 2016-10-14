@@ -33,49 +33,60 @@ Keyborder.prototype.setTabIndex = function(elm) {
   });
 };
 
-Keyborder.prototype.getHighestOrderProp = function(nodeList) {
-  return 3;
+// Get the loweset / highest order value from the supplied node list
+Keyborder.prototype.getMinMaxOrderProp = function(nodeList, minmax) {
+  if (minmax != 'min' && minmax != 'max') {
+    throw new Error('Wrong argument provided - accepted values are only min / max.');
+  }
+
+  // Create array contains each element's order value 
+  const orderArr = Array.prototype.map.call(nodeList, elm => {
+    return this.getOrderProp(elm);
+  });  
+  
+  switch (minmax) {
+    case 'min':
+      return Math.min.apply(null, orderArr);
+    case 'max':
+      return Math.max.apply(null, orderArr);
+  }
 }
 
-Keyborder.prototype.getLowestOrderProp = function(nodeList) {
-  return 1;
-}
+// Returns the closest previous / next element by the order property
+Keyborder.prototype.getClosestElement = function(currentElement, direction) {
+  if (direction != 'previous' && direction != 'next') {
+    throw new Error('Wrong argument provided - accepted values are only previous / next.');
+  }
 
-// Returns the closest next element by the order property
-Keyborder.prototype.getNextElement = function(currentElement) {
   const siblings = currentElement.parentNode.children;
   const currentOrder = this.getOrderProp(currentElement);
-  // Setting the initial closest order value to the highest possibility
-  let closestOrder = this.getHighestOrderProp(siblings);
+  // Sets the intial closest element to the element itself, in case there's no element after / before
   let closestElm = currentElement;
 
-  Array.prototype.forEach.call(siblings, elm => {
-    const elmOrder = this.getOrderProp(elm);
-    if (elmOrder > currentOrder && elmOrder <= closestOrder) {
-      closestOrder = elmOrder;
-      closestElm = elm;
-    }
-  });
+  if (direction == 'previous') {
+    // Setting the initial closest order value to the lowest possibility
+    let closestOrder = this.getMinMaxOrderProp(siblings, 'min');
+    Array.prototype.forEach.call(siblings, elm => {
+      const elmOrder = this.getOrderProp(elm);
+      if (elmOrder < currentOrder && elmOrder >= closestOrder) {
+        closestOrder = elmOrder;
+        closestElm = elm;
+      }
+    });
+  }
 
-  return closestElm;
-}
-
-// Returns the closest next element by the order property
-Keyborder.prototype.getPreviousElement = function(currentElement) {
-  const siblings = currentElement.parentNode.children;
-  const currentOrder = this.getOrderProp(currentElement);
-  // Setting the initial closest order value to the highest possibility
-  let closestOrder = this.getLowestOrderProp(siblings);
-  let closestElm = currentElement;
-
-  Array.prototype.forEach.call(siblings, elm => {
-    const elmOrder = this.getOrderProp(elm);
-    if (elmOrder < currentOrder && elmOrder >= closestOrder) {
-      closestOrder = elmOrder;
-      closestElm = elm;
-    }
-  });
-
+  if (direction == 'next') {
+    // Setting the initial closest order value to the highest possibility
+    let closestOrder = this.getMinMaxOrderProp(siblings, 'max');
+    Array.prototype.forEach.call(siblings, elm => {
+      const elmOrder = this.getOrderProp(elm);
+      if (elmOrder > currentOrder && elmOrder <= closestOrder) {
+        closestOrder = elmOrder;
+        closestElm = elm;
+      }
+    });
+  }
+  
   return closestElm;
 }
 
@@ -84,10 +95,10 @@ Keyborder.prototype.keyNavigation = function(event) {
   const activeElm = document.activeElement;
   switch (key) {
     case 39:
-      this.getNextElement(activeElm).focus();
+      this.getClosestElement(activeElm, 'next').focus();
       break;
     case 37:
-      this.getPreviousElement(activeElm).focus();
+      this.getClosestElement(activeElm, 'previous').focus();
       break;
   }
 }
