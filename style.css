@@ -14,14 +14,13 @@ body {
 }
 
 .a {
-  order: 3;
-  background-color: rgb(114, 123, 191);
+  background-color: DimGray;
 }
 
 .b {
-  order: 1;
+  background-color: DarkSeaGreen;
 }
 
 .c {
-  order: 2;
+  background-color: SaddleBrown;
 }

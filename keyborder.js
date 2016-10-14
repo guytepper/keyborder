@@ -1,47 +1,53 @@
-var Keyborder = function(selectors, options) {
-  const elements = document.querySelectorAll(selectors);
-  this.attachListeners(elements);
-  this.setTabIndex(elements[0]);
+var Keyborder = function(selectors) {
+  this.elements = document.querySelectorAll(selectors);  
+  Array.prototype.forEach.call(this.elements, elm => {
+    this.setTabIndex(elm);
+    elm.addEventListener('keydown', e => this.keyNavigation(e)); // ehm y return
+  });
 }
 
-// Handles key navigation when focused inside the container
-Keyborder.prototype.keyNavigation = function(event) {
-  console.log(event.which);
-};
-
-// Returns the lowest order prop for the elements
-Keyborder.prototype.getLowestOrder = function(children) {
-  // Use array's map method to iterate through the children NodeList
-  orderArr = Array.prototype.map.call(children, function(elm) {
-      return this.getOrderProp(elm);
-  });
-
-  return Math.min.apply(null, orderArr);
-};
-
 // Returns the CSS order property for the element
-Keyborder.prototype.getOrderProp(elm) = function(elm) {
-  // Property is provided as a string, so we return it as am interger instead
+Keyborder.prototype.getOrderProp = function(elm) {
+  // Property is provided as a string, so we return it as an interger instead
   return parseInt(window.getComputedStyle(elm).getPropertyValue('order'));
 };
 
+// Returns the lowest order prop for the elements
+ Keyborder.prototype.getLowestOrder = function(children) {
+  // Use array's map method to iterate through the children NodeList
+  orderArr = Array.prototype.map.call(children, elm => {
+    return this.getOrderProp(elm);
+  });
+ 
+  return Math.min.apply(null, orderArr);
+ };
+
+// Sets the tabindex attribute to for the childrens, according to thier order property
 Keyborder.prototype.setTabIndex = function(elm) {
   const children = elm.children;
-  console.log(this.getLowestOrder(children));
-  children.forEach(elm => {
-
+  const lowestOrder = this.getLowestOrder(children);
+  
+  Array.prototype.forEach.call(children, elm => {
+    if (this.getOrderProp(elm) == lowestOrder) elm.tabIndex = '0';
+    else elm.tabIndex = '-1';
   });
 };
 
-Keyborder.prototype.attachListeners = function(elements) {
-  elements.forEach(elm => {
-    elm.addEventListener('keyup', this.keyNavigation);
+// Returns next DOM element by the order property
+// Keyborder.prototype.getNextElement = function(elm) {
+//   const currentOrder = this.getOrderProp(elm);  
+//   const siblings = elm.parentNode.children;
+//   return this.closest(siblings, currentOrder);
+// }
 
-    // Event listener for getting focus
-    elm.addEventListener('focus', () => {
-      console.log('focused');
-    }, true);
-  })
-};
+Keyborder.prototype.keyNavigation = function(event) {
+  console.log('hiii...')
+  const key = event.which;
+  const activeElm = document.activeElement;
+  switch (key) {
+    case 39:
+      // this.getNextElement(activeElm).focus();
+  }
+}
 
-new Keyborder('.wrapper');
+const k = new Keyborder('.wrapper');
