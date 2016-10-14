@@ -90,17 +90,32 @@ Keyborder.prototype.getClosestElement = function(currentElement, direction) {
   return closestElm;
 }
 
+/* Handles key navigation when focused inside the container.
+ * - The previous / next element are being focused using the element's
+ *   order property.
+ * - The tabindex property is modified so the next time the element's parent
+ *   node get focused.
+*/
 Keyborder.prototype.keyNavigation = function(event) {
   const key = event.which;
   const activeElm = document.activeElement;
+  let closestElm = null;
+
   switch (key) {
     case 39:
-      this.getClosestElement(activeElm, 'next').focus();
+      closestElm = this.getClosestElement(activeElm, 'next');
       break;
     case 37:
-      this.getClosestElement(activeElm, 'previous').focus();
+      closestElm = this.getClosestElement(activeElm, 'previous');
       break;
+  }
+
+  if (closestElm != activeElm && closestElm != null) {
+    activeElm.tabIndex = '-1';
+    closestElm.focus();
+    closestElm.tabIndex = '0';
   }
 }
 
-const k = new Keyborder('.wrapper');
+const a = new Keyborder('.wrapper');
+const b = new Keyborder('.lol');
