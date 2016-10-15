@@ -64,7 +64,7 @@ Keyborder.prototype.getClosestElement = function(currentElement, direction) {
   const siblings = currentElement.parentNode.children;
   const currentOrder = this.getOrderProp(currentElement);
   // Sets the intial closest element to the element itself, in case there's no element after / before
-  let closestElm = currentElement;
+  let closestElm = null;
 
   if (direction == 'previous') {
     // Setting the initial closest order value to the lowest possibility
@@ -89,9 +89,13 @@ Keyborder.prototype.getClosestElement = function(currentElement, direction) {
       }
     });
   }
-  
+
+  // Don't return the element if it's set to not gain focus
+  if (closestElm != null) {
+    if (closestElm.dataset.noFocus == 'true') return null;
+  }
   return closestElm;
-}
+};
 
 /* Handles key navigation when focused inside the container.
  * - The previous / next element are being focused using the element's
