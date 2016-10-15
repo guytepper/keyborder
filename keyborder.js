@@ -13,14 +13,14 @@ Keyborder.prototype.getOrderProp = function(elm) {
 };
 
 // Returns the lowest order prop for the elements
- Keyborder.prototype.getLowestOrder = function(children) {
+Keyborder.prototype.getLowestOrder = function(children) {
   // Use array's map method to iterate through the children NodeList
-  orderArr = Array.prototype.map.call(children, elm => {
+  const orderArr = Array.prototype.map.call(children, elm => {
     return this.getOrderProp(elm);
   });
 
   return Math.min.apply(null, orderArr);
- };
+};
 
 // Sets the tabindex attribute to for the childrens, according to thier order property
 Keyborder.prototype.setTabIndex = function(elm) {
