@@ -42,11 +42,11 @@ Keyborder.prototype.getMinMaxOrderProp = function(nodeList, minmax) {
     throw new Error('Wrong argument provided - accepted values are only min / max.');
   }
 
-  // Create array contains each element's order value 
+  // Create array contains each element's order value
   const orderArr = Array.prototype.map.call(nodeList, elm => {
     return this.getOrderProp(elm);
-  });  
-  
+  });
+
   switch (minmax) {
     case 'min':
       return Math.min.apply(null, orderArr);
