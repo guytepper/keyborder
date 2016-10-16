@@ -4,16 +4,16 @@
 var Keyborder = function(selectors) {
   this.elements = document.querySelectorAll(selectors);  
   Array.prototype.forEach.call(this.elements, elm => {
-    // Set the initial tabindex value for the elements decendants
+    // Set the initial tabindex value for the element's decendants.
     this.setTabIndex(elm.children);
-    // Handle keydown events inside the element
+    // Handle keydown events inside the element.
     elm.addEventListener('keydown', e => this.keyNavigation(e)); // ehm y return
   });
 }
 
-// Returns the CSS order property for the element
+// Returns the CSS order property for the element.
 Keyborder.prototype.getOrderProp = function(elm) {
-  // Property is provided as a string, so we return it as an interger instead
+  // Property is provided as a string, so we return it as an interger instead.
   return parseInt(window.getComputedStyle(elm).getPropertyValue('order'));
 };
 
@@ -48,6 +48,7 @@ Keyborder.prototype.getMinMaxOrderProp = function(nodeList, minmax) {
     return this.getOrderProp(elm);
   });
 
+  // Return the loweset / highest order property.
   switch (minmax) {
     case 'min':
       return Math.min.apply(null, orderArr);
@@ -56,22 +57,27 @@ Keyborder.prototype.getMinMaxOrderProp = function(nodeList, minmax) {
   }
 }
 
-// Returns the closest previous / next element by the order property
+// Returns the previous / next element using the order property.
 Keyborder.prototype.getClosestElement = function(currentElement, direction) {
   if (direction != 'previous' && direction != 'next') {
     throw new Error('Wrong argument provided - accepted values are only previous / next.');
   }
 
+  // Get the element's siblings.
   const siblings = currentElement.parentNode.children;
-  const currentOrder = this.getOrderProp(currentElement);
-  // Sets the intial closest element to the element itself, in case there's no element after / before
+  // The current element's order property.
+  const currentOrder = this.getOrderProp(currentElement);  
   let closestElm = null;
 
   if (direction == 'previous') {
-    // Setting the initial closest order value to the lowest possibility
+    // Setting the initial closest order value to the lowest possibility.
     let closestOrder = this.getMinMaxOrderProp(siblings, 'min');
     Array.prototype.forEach.call(siblings, elm => {
       const elmOrder = this.getOrderProp(elm);
+      /* If the iterated element's order is lower than the current element's
+       * order, and the iterated element's order is higher / equal to closest
+       * element's order, then it should be the closest element.
+       */
       if (elmOrder < currentOrder && elmOrder >= closestOrder) {
         closestOrder = elmOrder;
         closestElm = elm;
@@ -79,8 +85,8 @@ Keyborder.prototype.getClosestElement = function(currentElement, direction) {
     });
   }
 
+  // Same as the 'previous' condition, but reversed.
   if (direction == 'next') {
-    // Setting the initial closest order value to the highest possibility
     let closestOrder = this.getMinMaxOrderProp(siblings, 'max');
     Array.prototype.forEach.call(siblings, elm => {
       const elmOrder = this.getOrderProp(elm);
@@ -91,7 +97,7 @@ Keyborder.prototype.getClosestElement = function(currentElement, direction) {
     });
   }
 
-  // Don't return the element if it's set to not gain focus
+  // Don't return the element if it should not gain focus.
   if (closestElm != null) {
     if (closestElm.dataset.noFocus == 'true') return null;
   }
@@ -101,9 +107,9 @@ Keyborder.prototype.getClosestElement = function(currentElement, direction) {
 /* Handles key navigation when focused inside the container.
  * - The previous / next element are being focused using the element's
  *   order property.
- * - The tabindex property is modified so the next time the element's parent
- *   node get focused.
-*/
+ * - The tabindex property is modified so when moving between containers,
+ *   element that was previously focused will get focused again.
+ */
 Keyborder.prototype.keyNavigation = function(event) {
   const key = event.which;
   const activeElm = document.activeElement;
