@@ -1,26 +1,107 @@
-body {
-  background-color: rgb(114, 163, 191);
+* {
+  box-sizing: border-box;
 }
 
-.wrapper {
+body {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+  background-color: #3498db;
+}
+
+.header {
+  margin: 30px 0;
+  text-align: center;
+  color: #F5A623;
+}
+
+.site-title {
+  margin: 0;
+  margin-bottom: 25px;
+  font-weight: 600;
+  font-style: italic;
+  font-size: 66px;
+}
+
+.site-description {
+  margin: 0 auto;
+  max-width: 560px;
+  font-size: 25px;
+}
+
+.site-content {
   display: flex;
+  margin: 10px auto;
+  flex-direction: column;
+}
+
+@media (min-width: 1200px) {
+  .site-content {
+    max-width: 1400px;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+}
+
+.code-title {
+  text-align: center;
+}
+
+.code-snippet {
+  margin: 0 auto;
+  max-width: 640px;
+}
+
+.container-title {
+  margin: 20px 0 10px;
+  font-size: 34px;
+  font-weight: 100;
+  text-align: center;
+  color: #000000;
+  text-decoration: underline;
+}
+
+@media (min-width: 660px) {
+  .preview {
+    margin: 0 auto;
+    max-width: 640px;
+  }
+}
+
+.container {
+  justify-content: center;
+  align-items: center;
+}
+
+.container-a {
+  background-color: #F5A623;
+}
+
+.container-b {
+  background-color: rgb(191, 114, 186);
 }
 
 .box {
-  width: 250px;
-  height: 250px;
+  width: 175px;
+  height: 175px;
   margin: 10px;
-  background-color: rgb(175, 114, 191);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 46px;
+  font-weight: 100;
+}
+
+.box:focus {
+  outline-width: 6px;
 }
 
 .a {
-  background-color: DimGray;
+  background-color: #5BFFE1;
 }
 
 .b {
-  background-color: DarkSeaGreen;
+  background-color: #FF8585;
 }
 
 .c {
-  background-color: SaddleBrown;
+  background-color: #FADA72;
 }

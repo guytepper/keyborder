@@ -7,12 +7,52 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body id="body">
-  <div class="wrapper">
-    <div class="box a" style="order: 3">A - 3</div>
-    <div class="box b" style="order: 1">B - 1</div>
-    <div class="box c" style="order: 2">C - 2</div>
+
+  <header class="header">
+    <h1 class="site-title">Keyborder</h1>
+    <p class="site-description">Navigating through the DOM while using flexbox’s order property is not an easy task. Keyborder to the rescue!</p>
+  </header>
+  <!-- HTML generated using hilite.me -->
+<main class="site-content">
+<div class="code-example">
+    <h2 class="code-title">HTML</h2>
+<div class="code-snippet" style="background: #202020; overflow:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">&lt;div</span> <span style="color: #bbbbbb">class=</span><span style="color: #ed9d13">&quot;container-a&quot;</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;display: flex&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;div</span> <span style="color: #bbbbbb">class=</span><span style="color: #ed9d13">&quot;box a&quot;</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;order: 3&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>A<span style="color: #6ab825; font-weight: bold">&lt;/div&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;div</span> <span style="color: #bbbbbb">class=</span><span style="color: #ed9d13">&quot;box b&quot;</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;order: 1&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>B<span style="color: #6ab825; font-weight: bold">&lt;/div&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;div</span> <span style="color: #bbbbbb">class=</span><span style="color: #ed9d13">&quot;box c&quot;</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;order: 2&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>C<span style="color: #6ab825; font-weight: bold">&lt;/div&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/div&gt;</span>
+
+<span style="color: #6ab825; font-weight: bold">&lt;div</span> <span style="color: #bbbbbb">class=</span><span style="color: #ed9d13">&quot;container-b&quot;</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;display: flex&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;div</span> <span style="color: #bbbbbb">class=</span><span style="color: #ed9d13">&quot;box a&quot;</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;order: 2&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>A<span style="color: #6ab825; font-weight: bold">&lt;/div&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;div</span> <span style="color: #bbbbbb">class=</span><span style="color: #ed9d13">&quot;box b&quot;</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;order: 3&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>B<span style="color: #6ab825; font-weight: bold">&lt;/div&gt;</span>
+  <span style="color: #6ab825; font-weight: bold">&lt;div</span> <span style="color: #bbbbbb">class=</span><span style="color: #ed9d13">&quot;box c&quot;</span> <span style="color: #bbbbbb">style=</span><span style="color: #ed9d13">&quot;order: 1&quot;</span><span style="color: #6ab825; font-weight: bold">&gt;</span>C<span style="color: #6ab825; font-weight: bold">&lt;/div&gt;</span>
+<span style="color: #6ab825; font-weight: bold">&lt;/div&gt;</span>
+</pre></div>
+    <h2 class="code-title">JavaScript</h2>
+<div class="code-snippet" style="background: #202020; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #6ab825; font-weight: bold">new</span> <span style="color: #d0d0d0">Keyborder(</span><span style="color: #ed9d13">&#39;.container&#39;</span><span style="color: #d0d0d0">);</span>
+</pre></div>
+</div>
+
+  <div class="preview">
+    <h2 class="container-title">Container A</h2>
+    <div class="container container-a" style="display: flex">
+      <div class="box a" style="order: 3">A</div>
+      <div class="box b" style="order: 1">B</div>
+      <div class="box c" style="order: 2">C</div>
+    </div>
+
+    <h2 class="container-title">Container B</h2>
+    <div class="container container-b" style="display: flex">
+      <div class="box a" style="order: 2">A</div>
+      <div class="box b" style="order: 3">B</div>
+      <div class="box c" style="order: 1">C</div>
+    </div>
   </div>
+</main>
 
   <script src="./keyborder.js"></script>
+  <script>
+    new Keyborder('.container');
+  </script>
 </body>
 </html>

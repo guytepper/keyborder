@@ -2,7 +2,7 @@
  * navigation to it's decendants.
  */
 var Keyborder = function(selectors) {
-  this.elements = document.querySelectorAll(selectors);  
+  this.elements = document.querySelectorAll(selectors);
   Array.prototype.forEach.call(this.elements, elm => {
     // Set the initial tabindex value for the element's decendants.
     this.setTabIndex(elm.children);
@@ -17,11 +17,11 @@ Keyborder.prototype.getOrderProp = function(elm) {
   return parseInt(window.getComputedStyle(elm).getPropertyValue('order'));
 };
 
-/* The function sets the tabindex attribute for the element's decendants, 
+/* The function sets the tabindex attribute for the element's decendants,
  * according to thier order property:
- * - The element with the lowest order property appears first in the UI and 
+ * - The element with the lowest order property appears first in the UI and
  *   should be the first to receive focus, therefore we set it's tabindex to '0'.
- * - Other element's tabindex will be set to '-1'. 
+ * - Other element's tabindex will be set to '-1'.
  */
 Keyborder.prototype.setTabIndex = function(children) {
   const lowestOrder = this.getMinMaxOrderProp(children, 'min');
@@ -66,7 +66,7 @@ Keyborder.prototype.getClosestElement = function(currentElement, direction) {
   // Get the element's siblings.
   const siblings = currentElement.parentNode.children;
   // The current element's order property.
-  const currentOrder = this.getOrderProp(currentElement);  
+  const currentOrder = this.getOrderProp(currentElement);
   let closestElm = null;
 
   if (direction == 'previous') {
@@ -130,6 +130,3 @@ Keyborder.prototype.keyNavigation = function(event) {
     closestElm.tabIndex = '0';
   }
 }
-
-const a = new Keyborder('.wrapper');
-const b = new Keyborder('.lol');
