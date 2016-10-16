@@ -1,7 +1,12 @@
+/* The constructor recevies list of selectors and applies keyboard
+ * navigation to it's decendants.
+ */
 var Keyborder = function(selectors) {
-  this.elements = document.querySelectorAll(selectors);
+  this.elements = document.querySelectorAll(selectors);  
   Array.prototype.forEach.call(this.elements, elm => {
-    this.setTabIndex(elm);
+    // Set the initial tabindex value for the elements decendants
+    this.setTabIndex(elm.children);
+    // Handle keydown events inside the element
     elm.addEventListener('keydown', e => this.keyNavigation(e)); // ehm y return
   });
 }
@@ -12,23 +17,17 @@ Keyborder.prototype.getOrderProp = function(elm) {
   return parseInt(window.getComputedStyle(elm).getPropertyValue('order'));
 };
 
-// Returns the lowest order prop for the elements
-Keyborder.prototype.getLowestOrder = function(children) {
-  // Use array's map method to iterate through the children NodeList
-  const orderArr = Array.prototype.map.call(children, elm => {
-    return this.getOrderProp(elm);
-  });
-
-  return Math.min.apply(null, orderArr);
-};
-
-// Sets the tabindex attribute to for the childrens, according to thier order property
-Keyborder.prototype.setTabIndex = function(elm) {
-  const children = elm.children;
-  const lowestOrder = this.getLowestOrder(children);
+/* The function sets the tabindex attribute for the element's decendants, 
+ * according to thier order property:
+ * - The element with the lowest order property appears first in the UI and 
+ *   should be the first to receive focus, therefore we set it's tabindex to '0'.
+ * - Other element's tabindex will be set to '-1'. 
+ */
+Keyborder.prototype.setTabIndex = function(children) {
+  const lowestOrder = this.getMinMaxOrderProp(children, 'min');
 
   Array.prototype.forEach.call(children, elm => {
-    // Don't set tabindex if data-no-focus set on the element
+    // Don't set tabindex if data-no-focus is set on the element.
     if (elm.dataset.noFocus == 'true') return;
 
     if (this.getOrderProp(elm) == lowestOrder) elm.tabIndex = '0';
@@ -36,13 +35,15 @@ Keyborder.prototype.setTabIndex = function(elm) {
   });
 };
 
-// Get the loweset / highest order value from the supplied node list
+/* The function receives a list of nodes and returns the lowest / highest
+ * order property among them, according to the 'minmax' value.
+ */
 Keyborder.prototype.getMinMaxOrderProp = function(nodeList, minmax) {
   if (minmax != 'min' && minmax != 'max') {
     throw new Error('Wrong argument provided - accepted values are only min / max.');
   }
 
-  // Create array contains each element's order value
+  // Create array contains each element's order value.
   const orderArr = Array.prototype.map.call(nodeList, elm => {
     return this.getOrderProp(elm);
   });
