@@ -1,6 +1,16 @@
-Howdy!
+# Keyborder
+Keyborder aims to solve the disconnect between the visual and the DOM order when using Flexbox's order property.
 
-This is a work in progress project - and hopefully, one day it would be able to make keyboard users to navigate through the DOM using flexbox's order property! horray!
+## How to use
+Grab the source file and include it in your project. Then initiate a new keyborder instance with the element selector you want to attach keyborder to:
+
+```javascript
+new Keyborder('.wrapper');
+```
+
+Keyborder will then run through the child elements, set the correct `tabindex` for each of them and attach event listener for the parent, so when navigating through the child elements with a keyboard, they will be focused according to thier visual order. 
+
+**Note:** Navigating the child elements is with the arrow keys.
 
 ## Edge cases
 **What if I don't want a child element to get focus?**  
