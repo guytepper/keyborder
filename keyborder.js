@@ -1,14 +1,35 @@
+const Utils = (function() {
+  // Checks if an element is focusable
+  function focusable(element) {
+    const nodeName = element.nodeName.toLowerCase();
+    
+    if (/input|select|textarea|button|object/.test( nodeName )) {    
+      return !element.disabled;
+    }
+
+    if ("a" === nodeName) {
+      return element.href || element.tabIndex != -1;
+    }
+    
+    return element.tabIndex != '-1';
+  }
+
+  return {
+    focusable: focusable,
+  }  
+})();
+
 /* The constructor recevies list of selectors and applies keyboard
  * navigation to it's decendants.
  */
-var Keyborder = function(selectors) {
-  this.elements = document.querySelectorAll(selectors);
-  Array.prototype.forEach.call(this.elements, elm => {
-    // Set the initial tabindex value for the element's decendants.
-    this.setTabIndex(elm.children);
-    // Handle keydown events inside the element.
-    elm.addEventListener('keydown', e => this.keyNavigation(e)); // ehm y return
-  });
+const Keyborder = function(selector) {
+  const container = document.querySelector(selector);
+  
+  // Set the initial tabindex value for the contianer's decendants.
+  this.setTabIndex(container.children);
+
+  // Handle keydown events inside the element.
+  container.addEventListener('keydown', e => this.keyNavigation(e)); // ehm y return
 }
 
 // Returns the CSS order property for the element.
@@ -24,38 +45,21 @@ Keyborder.prototype.getOrderProp = function(elm) {
  * - Other element's tabindex will be set to '-1'.
  */
 Keyborder.prototype.setTabIndex = function(children) {
-  const lowestOrder = this.getMinMaxOrderProp(children, 'min');
+  let order = 1;
 
-  Array.prototype.forEach.call(children, elm => {
-    // Don't set tabindex if data-no-focus is set on the element.
-    if (elm.dataset.noFocus == 'true') return;
+  // Creates new array contains only focusable elements
+  const arr = this.focusableElements =
+    Array.prototype.filter.call(children, elm => Utils.focusable(elm))
+    // Sort the array by the element's order property 
+    .sort((a, b) => this.getOrderProp(a) - this.getOrderProp(b));
 
-    if (this.getOrderProp(elm) == lowestOrder) elm.tabIndex = '0';
-    else elm.tabIndex = '-1';
-  });
+  // Set the intial tabindex of the elements
+  arr.tabIndex = '0';
+  for (let i = 1; i < arr.length; i++) {
+    arr[i].tabIndex = '-1';
+  }
+
 };
-
-/* The function receives a list of nodes and returns the lowest / highest
- * order property among them, according to the 'minmax' value.
- */
-Keyborder.prototype.getMinMaxOrderProp = function(nodeList, minmax) {
-  if (minmax != 'min' && minmax != 'max') {
-    throw new Error('Wrong argument provided - accepted values are only min / max.');
-  }
-
-  // Create array contains each element's order value.
-  const orderArr = Array.prototype.map.call(nodeList, elm => {
-    return this.getOrderProp(elm);
-  });
-
-  // Return the loweset / highest order property.
-  switch (minmax) {
-    case 'min':
-      return Math.min.apply(null, orderArr);
-    case 'max':
-      return Math.max.apply(null, orderArr);
-  }
-}
 
 // Returns the previous / next element using the order property.
 Keyborder.prototype.getClosestElement = function(currentElement, direction) {
@@ -63,45 +67,16 @@ Keyborder.prototype.getClosestElement = function(currentElement, direction) {
     throw new Error('Wrong argument provided - accepted values are only previous / next.');
   }
 
-  // Get the element's siblings.
-  const siblings = currentElement.parentNode.children;
-  // The current element's order property.
-  const currentOrder = this.getOrderProp(currentElement);
-  let closestElm = null;
+  // The index of the element in the focusableElements array
+  const index = this.focusableElements.indexOf(currentElement);
+
+  if (direction == 'next') {
+    return this.focusableElements[index + 1];
+  }
 
   if (direction == 'previous') {
-    // Setting the initial closest order value to the lowest possibility.
-    let closestOrder = this.getMinMaxOrderProp(siblings, 'min');
-    Array.prototype.forEach.call(siblings, elm => {
-      const elmOrder = this.getOrderProp(elm);
-      /* If the iterated element's order is lower than the current element's
-       * order, and the iterated element's order is higher / equal to closest
-       * element's order, then it should be the closest element.
-       */
-      if (elmOrder < currentOrder && elmOrder >= closestOrder) {
-        closestOrder = elmOrder;
-        closestElm = elm;
-      }
-    });
+    return this.focusableElements[index - 1];
   }
-
-  // Same as the 'previous' condition, but reversed.
-  if (direction == 'next') {
-    let closestOrder = this.getMinMaxOrderProp(siblings, 'max');
-    Array.prototype.forEach.call(siblings, elm => {
-      const elmOrder = this.getOrderProp(elm);
-      if (elmOrder > currentOrder && elmOrder <= closestOrder) {
-        closestOrder = elmOrder;
-        closestElm = elm;
-      }
-    });
-  }
-
-  // Don't return the element if it should not gain focus.
-  if (closestElm != null) {
-    if (closestElm.dataset.noFocus == 'true') return null;
-  }
-  return closestElm;
 };
 
 /* Handles key navigation when focused inside the container.
@@ -124,7 +99,7 @@ Keyborder.prototype.keyNavigation = function(event) {
       break;
   }
 
-  if (closestElm != activeElm && closestElm != null) {
+  if (closestElm != activeElm && closestElm != undefined) {
     activeElm.tabIndex = '-1';
     closestElm.focus();
     closestElm.tabIndex = '0';

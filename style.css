@@ -5,12 +5,18 @@
 body {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
   background-color: #3498db;
+  background-color: #263238;
+  /*color: white;*/
+}
+
+h2 {
+  color: #B2CCD6;
 }
 
 .header {
   margin: 30px 0;
-  text-align: center;
-  color: #F5A623;
+  text-align: center;  
+  color: #F78C6C;
 }
 
 .site-title {
@@ -47,6 +53,7 @@ body {
   background: #202020;
   border: solid gray;
   border-width: .1em .1em .1em .8em;
+  color: #fff;
 }
 
 .container-title {
@@ -54,11 +61,10 @@ body {
   font-size: 34px;
   font-weight: 100;
   text-align: center;
-  color: #000000;
   text-decoration: underline;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 640px) {
   .preview {
     display: flex;
     flex-direction: column;
@@ -76,7 +82,16 @@ body {
 }
 
 .container-b {
-  background-color: rgb(191, 114, 186);
+  width: 100%;
+  max-width: 585px;
+  padding: 10px;
+  justify-content: space-around;
+  background-color: #202020;
+  border: 2px solid #808080;
+}
+
+.container-b a {
+  color: #89DDF7;
 }
 
 .box {
