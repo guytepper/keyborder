@@ -27,16 +27,10 @@ body {
   font-size: 25px;
 }
 
-.site-content {
-  display: flex;
-  margin: 10px auto;
-  flex-direction: column;
-}
-
-@media (min-width: 1200px) {
+@media (min-width: 1024px) {
   .site-content {
+    display: flex;
     max-width: 1400px;
-    flex-direction: row;
     justify-content: space-around;
   }
 }
@@ -64,10 +58,11 @@ body {
   text-decoration: underline;
 }
 
-@media (min-width: 660px) {
+@media (min-width: 600px) {
   .preview {
-    margin: 0 auto;
-    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
 
