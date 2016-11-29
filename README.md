@@ -1,4 +1,4 @@
-# Keyborder
+# Keyborder (work in progress)
 Keyborder aims to solve the disconnect between the visual and the DOM order when using Flexbox's order property.
 
 ## How to use
